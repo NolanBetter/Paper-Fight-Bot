@@ -25,4 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelectorAll("[data-year]").forEach(el => el.textContent = new Date().getFullYear());
+
+  // auth runs on every page so the sign in pill sits in the nav everywhere.
+  // account.html loads it itself, so skip the duplicate there.
+  if (!document.querySelector('script[src$="auth.js"]')) {
+    const s = document.createElement("script");
+    s.src = "assets/auth.js";
+    document.body.appendChild(s);
+  }
 });
