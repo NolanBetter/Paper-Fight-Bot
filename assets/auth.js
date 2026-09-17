@@ -175,6 +175,25 @@ const Auth = {
     // return this._signOut(this._auth);
   },
 
+  /** The only identity that exists today is a linked Minecraft name. */
+  signedIn() {
+    return !!(this.user || this.mcName);
+  },
+
+  displayName() {
+    if (this.mcName) return this.mcName;
+    if (this.user) return this.user.displayName || this.user.email || "there";
+    return null;
+  },
+
+  /** Bounces to the account page, remembering where you were headed. */
+  requireSignIn(here) {
+    if (this.signedIn()) return true;
+    const next = here || (location.pathname.split("/").pop() || "");
+    location.replace("account.html?next=" + encodeURIComponent(next));
+    return false;
+  },
+
   onChange(fn) {
     this._watchers.push(fn);
     fn(this.user, this.mcName);
@@ -187,30 +206,56 @@ const Auth = {
 
 /* ----------------------------------------------- the sign in pill in the nav */
 
+const HEAD_PX = 24;
+
 function mountNavWidget() {
   const nav = document.querySelector(".bar nav");
   if (!nav || nav.querySelector(".auth")) return;
 
+  // Report sits before the pill, and only once there is someone to report as.
+  const report = document.createElement("a");
+  report.href = "report.html";
+  report.textContent = "Report";
+  report.hidden = true;
+  nav.appendChild(report);
+
   const pill = document.createElement("a");
   pill.className = "auth";
   pill.href = "account.html";
+
+  // Sizing is set here as well as in the stylesheet on purpose. If style.css
+  // is stale or cached, the head would otherwise render at full size and shove
+  // the rest of the nav off screen.
+  pill.style.cssText = "display:inline-flex;align-items:center;gap:8px;flex:none;" +
+      "white-space:nowrap;text-decoration:none;line-height:1";
   nav.appendChild(pill);
 
-  Auth.onChange((user, mcName) => {
+  Auth.onChange(() => {
+    const name = Auth.displayName();
+    report.hidden = !Auth.signedIn();
     pill.textContent = "";
-    if (mcName) {
-      const img = document.createElement("img");
-      Auth.paintHead(img, mcName, 64);
-      const who = document.createElement("span");
-      who.className = "who";
-      who.textContent = mcName;
-      pill.appendChild(img);
-      pill.appendChild(who);
-      pill.title = "Your account";
-    } else {
+
+    if (!name) {
       pill.textContent = "Sign in";
       pill.title = "Sign in";
+      return;
     }
+
+    if (Auth.mcName) {
+      const img = document.createElement("img");
+      img.width = HEAD_PX;
+      img.height = HEAD_PX;
+      img.style.cssText = "width:" + HEAD_PX + "px;height:" + HEAD_PX + "px;" +
+          "image-rendering:pixelated;display:block;flex:none";
+      Auth.paintHead(img, Auth.mcName, 64);
+      pill.appendChild(img);
+    }
+    const who = document.createElement("span");
+    who.className = "who";
+    who.style.cssText = "max-width:13ch;overflow:hidden;text-overflow:ellipsis";
+    who.textContent = name;
+    pill.appendChild(who);
+    pill.title = "Your account";
   });
 }
 
@@ -218,6 +263,14 @@ function mountNavWidget() {
 
 function mountAccountPage() {
   const out = document.querySelector("[data-signed-out]");
+  const why = document.querySelector("[data-why]");
+  if (why) {
+    const next = new URLSearchParams(location.search).get("next");
+    if (next) {
+      why.textContent = "Set your Minecraft name below and you can carry on to " + next + ".";
+      why.hidden = false;
+    }
+  }
   const inn = document.querySelector("[data-signed-in]");
   const nameInput = document.querySelector("[data-mc-input]");
   const setBtn = document.querySelector("[data-mc-set]");
@@ -246,6 +299,8 @@ function mountAccountPage() {
     setBtn.addEventListener("click", () => {
       if (Auth.saveName(nameInput.value)) {
         if (note) note.textContent = "";
+        const next = new URLSearchParams(location.search).get("next");
+        if (next && /^[a-z0-9._-]+\.html$/i.test(next)) location.href = next;
       } else if (note) {
         note.textContent = "That is not a Minecraft username. Three to sixteen letters, numbers or underscores.";
       }
@@ -274,9 +329,17 @@ function mountAccountPage() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+/* This file is sometimes injected by site.js after DOMContentLoaded has
+   already fired, in which case listening for it would never run anything. */
+function startAuth() {
   Auth.boot().then(() => {
     mountNavWidget();
     mountAccountPage();
   });
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", startAuth);
+} else {
+  startAuth();
+}

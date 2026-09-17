@@ -185,6 +185,23 @@ td code,td .cmd{white-space:nowrap}
 .me .name{font-family:var(--display);font-size:22px;color:#fff}
 .me .sub{font-size:14px;color:var(--ash)}
 
+/* ---------- report form ---------- */
+.form{background:var(--pit);border:3px solid #000;padding:clamp(22px,4vw,34px);max-width:760px}
+.form label{display:block;font-family:var(--display);font-size:17px;color:#fff;
+  margin:24px 0 8px;letter-spacing:.3px}
+.form label:first-child{margin-top:0}
+.form .opt{font-family:var(--body);font-size:14px;color:var(--ash);letter-spacing:0}
+.form input,.form textarea{width:100%;background:#000;color:#efedee;border:0;padding:13px 15px;
+  font-family:var(--body);font-size:16px;line-height:1.6;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.1),inset -2px -2px 0 rgba(0,0,0,.9)}
+.form textarea{resize:vertical}
+.form textarea.mono{font-size:14.5px}
+.form input:focus,.form textarea:focus{outline:3px solid var(--ember);outline-offset:2px}
+.form .hint{color:var(--ash);font-size:15px;margin:26px 0 14px}
+.form .btn{width:100%}
+.form .status{margin:16px 0 0;font-size:15.5px}
+.form #fallback{margin-top:26px}
+
 .qa{border-top:3px solid #000}
 .qa details{border-bottom:3px solid #000}
 .qa summary{cursor:pointer;padding:20px 0;font-family:var(--display);font-size:19px;color:#fff;
