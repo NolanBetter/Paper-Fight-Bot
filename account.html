@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account — Paper Fight Bot</title>
+<meta name="description" content="Accounts for Paper Fight Bot. Not switched on yet.">
+<meta property="og:title" content="Account — Paper Fight Bot">
+<meta property="og:description" content="Accounts for Paper Fight Bot. Not switched on yet.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/account.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>Account</h1>
+    <p class="lede">Accounts aren't switched on yet. This is where they'll live.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+    <div data-signed-out>
+      <div class="signin">
+        <h3>Sign in</h3>
+        <p>Coming soon. Nothing is collected here right now — no sign-up, no tracking, no database behind this page.</p>
+        <button class="btn" data-signin disabled>Sign in with Google</button>
+        <button class="btn ghost" data-signin disabled>Sign in with email</button>
+      </div>
+    </div>
+
+    <div data-signed-in hidden>
+      <div class="signin">
+        <h3>Signed in</h3>
+        <p>Welcome back, <span data-user-name>there</span>.</p>
+        <button class="btn ghost" data-signout>Sign out</button>
+      </div>
+    </div>
+
+    <h2 style="margin-top:52px">What accounts will be for</h2>
+    <div class="spec">
+      <div class="spec-row">
+        <h3>Saved loadouts <span class="soon">planned</span></h3>
+        <p>Build a bot loadout here and pull it into any server you run, instead of rebuilding it in the equipment screen every time.</p>
+      </div>
+      <div class="spec-row">
+        <h3>Config presets <span class="soon">planned</span></h3>
+        <p>Share and download <span class="cmd">config.yml</span> presets — harder bots, slower bots, crystal-focused bots.</p>
+      </div>
+      <div class="spec-row">
+        <h3>Bug reports <span class="soon">planned</span></h3>
+        <p>File a report from the site with your versions attached, rather than typing it all into Discord.</p>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:30px">
+      <b>Nothing is collected right now.</b> The sign-in buttons above are inert until the backend exists.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script src="assets/auth.js"></script>
+</body>
+</html>

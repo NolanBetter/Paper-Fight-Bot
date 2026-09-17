@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiki — Paper Fight Bot</title>
+<meta name="description" content="Every Paper Fight Bot command, the equipment screen, groups, roaming, patrols and troubleshooting.">
+<meta property="og:title" content="Wiki — Paper Fight Bot">
+<meta property="og:description" content="Every Paper Fight Bot command, the equipment screen, groups, roaming, patrols and troubleshooting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/wiki.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>Wiki</h1>
+    <p class="lede">Every command, what each equipment slot does, and the fixes for the things that usually go wrong.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="wiki">
+      <nav class="wiki-nav" aria-label="Wiki sections">
+        <a href="#commands">Commands</a>
+        <a href="#equipment">Equipment</a>
+        <a href="#groups">Groups</a>
+        <a href="#roaming">Roaming</a>
+        <a href="#patrols">Patrols</a>
+        <a href="#config">Config</a>
+        <a href="#trouble">Troubleshooting</a>
+      </nav>
+
+      <div class="wiki-body">
+        <h2 id="commands">Commands</h2>
+        <p>Everything runs under <span class="cmd">/fightbot</span>, shortened to <span class="cmd">/fb</span>. The permission is <span class="cmd">fightbot.use</span>, which defaults to OP.</p>
+
+        <h3>Spawning</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot spawn &lt;name&gt;</span></td><td>Spawns one bot with the name you give it, where you're standing.</td></tr>
+            <tr><td><span class="cmd">/fightbot spawn --random [count]</span></td><td>Spawns 1 to 50 bots with random player-style names.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Fighting</h3>
+        <div class="tw"><table>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot fight &lt;bot&gt; &lt;player...&gt;</span></td><td>Sends one bot after one or more players.</td></tr>
+            <tr><td><span class="cmd">/fightbot fight --all &lt;player...&gt;</span></td><td>Sends every bot after those players.</td></tr>
+            <tr><td><span class="cmd">/fightbot fight --group &lt;group&gt; &lt;player...&gt;</span></td><td>Sends a whole group after players.</td></tr>
+            <tr><td><span class="cmd">/fightbot fight --group &lt;A&gt; &lt;B&gt;</span></td><td>Sets two groups on each other. Good for watching.</td></tr>
+            <tr><td><span class="cmd">/fightbot stop &lt;bot|--all&gt;</span></td><td>Calls them off.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Managing bots</h3>
+        <div class="tw"><table>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot list</span></td><td>Shows every live bot and group.</td></tr>
+            <tr><td><span class="cmd">/fightbot remove &lt;bot|--all&gt;</span></td><td>Deletes bots.</td></tr>
+            <tr><td><span class="cmd">/fightbot edit clone &lt;bot&gt; &lt;name|--random&gt;</span></td><td>Copies a bot, gear and inventory included — and it joins the fight the original is in.</td></tr>
+            <tr><td><span class="cmd">/fightbot edit change &lt;bot&gt; &lt;name|--random&gt;</span></td><td>Renames a bot.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3>Moving them</h3>
+        <div class="tw"><table>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot tp &lt;bot&gt; &lt;player&gt;</span></td><td>Teleports a bot to a player.</td></tr>
+            <tr><td><span class="cmd">/fightbot tp &lt;bot&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt;</span></td><td>Teleports a bot to coordinates.</td></tr>
+            <tr><td><span class="cmd">/fightbot tp --all &lt;player|x y z&gt;</span></td><td>Teleports every bot at once.</td></tr>
+            <tr><td><span class="cmd">/fightbot tp --group &lt;group&gt; &lt;player|x y z&gt;</span></td><td>Teleports a group.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="equipment">Equipment</h2>
+        <p>Right&#8209;click any bot <b>in creative mode</b> to open its equipment screen. Every slot maps to a behaviour: give the bot the item and it will use it.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Slots</th><th>Contents</th></tr></thead>
+          <tbody>
+            <tr><td>1–4</td><td>Helmet, chestplate, leggings, boots</td></tr>
+            <tr><td>5</td><td>Offhand — totem or shield</td></tr>
+            <tr><td>6</td><td>Main hand — its weapon</td></tr>
+            <tr><td>7</td><td>Axe, used to break raised shields</td></tr>
+            <tr><td>8</td><td>Food, for eating and regen</td></tr>
+            <tr><td>9</td><td>Cobwebs</td></tr>
+            <tr><td>10</td><td>Ender pearls</td></tr>
+            <tr><td>11</td><td>Water bucket, for clutching</td></tr>
+            <tr><td>12–14</td><td>Held back for mace and crystal gear</td></tr>
+            <tr><td>15+</td><td>Storage — anything the bot picks up lands here</td></tr>
+          </tbody>
+        </table></div>
+        <p>When a hotbar slot empties mid&#8209;fight the bot refills it from storage, so stack spare pearls or totems in the back and it keeps going. Slot positions and item behaviour can all be moved around in <span class="cmd">config.yml</span>.</p>
+
+        <h2 id="groups">Groups</h2>
+        <p>Groups let you command several bots at once, and make them retaliate together.</p>
+        <pre>/fightbot group create <span class="k">redteam</span>
+/fightbot group add <span class="k">redteam</span> Kade
+/fightbot group list <span class="k">redteam</span></pre>
+        <div class="tw"><table>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot group create &lt;name&gt;</span></td><td>Makes a group.</td></tr>
+            <tr><td><span class="cmd">/fightbot group add &lt;group&gt; &lt;bot&gt;</span></td><td>Puts a bot in it.</td></tr>
+            <tr><td><span class="cmd">/fightbot group list [group]</span></td><td>Lists groups, or one group's members.</td></tr>
+            <tr><td><span class="cmd">/fightbot group edit remove &lt;group&gt; &lt;bot&gt;</span></td><td>Takes a bot out.</td></tr>
+            <tr><td><span class="cmd">/fightbot group edit change &lt;old&gt; &lt;new&gt;</span></td><td>Renames a group.</td></tr>
+            <tr><td><span class="cmd">/fightbot group remove &lt;group&gt;</span></td><td>Deletes it.</td></tr>
+          </tbody>
+        </table></div>
+        <p>With two groups you can set them on each other and watch, or drop yourself into the middle of one:</p>
+        <pre>/fightbot fight --group <span class="k">redteam</span> <span class="k">blueteam</span></pre>
+
+        <h2 id="roaming">Roaming</h2>
+        <p>Roaming bots wander instead of hunting. They stay peaceful until something hits them.</p>
+        <pre>/fightbot roam <span class="k">Kade</span>
+/fightbot roam --group <span class="k">redteam</span>
+/fightbot roam --all</pre>
+        <p>Hit a roaming bot and it fights back. Hit one that's in a group and <b>every bot in that group comes for you</b> — worth knowing before you punch one for fun.</p>
+
+        <h2 id="patrols">Patrols</h2>
+        <p>Waypoint loops, for bots that walk a route rather than wandering.</p>
+        <div class="tw"><table>
+          <tbody>
+            <tr><td><span class="cmd">/fightbot patrol add &lt;bot&gt;</span></td><td>Saves where you're standing as a waypoint.</td></tr>
+            <tr><td><span class="cmd">/fightbot patrol start &lt;bot&gt;</span></td><td>Starts the bot walking the loop.</td></tr>
+            <tr><td><span class="cmd">/fightbot patrol stop &lt;bot&gt;</span></td><td>Stops it.</td></tr>
+            <tr><td><span class="cmd">/fightbot patrol list &lt;bot&gt;</span></td><td>Shows the bot's waypoints.</td></tr>
+            <tr><td><span class="cmd">/fightbot patrol clear &lt;bot&gt;</span></td><td>Wipes them.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h2 id="config">Config</h2>
+        <p>Two files sit in the plugin's folder:</p>
+        <ul>
+          <li><span class="cmd">config.yml</span> — bot health, speed, damage, and which equipment slot does what.</li>
+          <li><span class="cmd">botnames.yml</span> — the pool that <span class="cmd">--random</span> pulls names from.</li>
+        </ul>
+        <p>Edit either, then reload without restarting:</p>
+        <pre>/fightbot reload</pre>
+        <div class="note">
+          <b>One catch.</b> Health, speed and damage changes only apply to bots spawned <b>after</b> the reload.
+          Bots already standing there keep the old values, so clear them if you want the new numbers.
+        </div>
+        <pre>/fightbot remove --all
+/fightbot spawn --random 1</pre>
+
+        <h2 id="trouble">Troubleshooting</h2>
+
+        <h3>The plugin won't load</h3>
+        <p>Check your server is on 1.16 or newer. If you're running a build below 4.1.0, install the free LibsDisguises alongside it — older builds rely on it. From 4.1.0 onward you don't need it.</p>
+
+        <h3>Bots look like zombies</h3>
+        <p>Same thing: an old build without LibsDisguises. Update to the newest release and it goes away.</p>
+
+        <h3>A bot just stands there</h3>
+        <p>It hasn't been told to fight anyone. Run <span class="cmd">/fightbot fight &lt;bot&gt; &lt;you&gt;</span>. If it's already fighting and still frozen, it probably can't path to you — try it on flatter ground first.</p>
+
+        <h3>Bots move slowly</h3>
+        <p>Check the speed value in <span class="cmd">config.yml</span>, and remember it only applies to newly spawned bots — clear and respawn after changing it. If it started after updating to a beta, roll back to the last full release and report it in Discord with your server version.</p>
+
+        <h3>Config changes did nothing</h3>
+        <p>Health, speed and damage only apply to newly spawned bots. Remove the existing ones and spawn fresh.</p>
+
+        <h3>Something else</h3>
+        <p>Report it in Discord with your server version, your plugin version and anything the console printed. Bug reports there are what drive most updates.</p>
+
+        <div class="cta-row">
+          <a class="btn" href="#" data-discord>Report it in Discord</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

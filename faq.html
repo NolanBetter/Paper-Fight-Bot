@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — Paper Fight Bot</title>
+<meta name="description" content="Common questions about Paper Fight Bot: versions, dependencies, bot limits and server support.">
+<meta property="og:title" content="FAQ — Paper Fight Bot">
+<meta property="og:description" content="Common questions about Paper Fight Bot: versions, dependencies, bot limits and server support.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/faq.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>FAQ</h1>
+    <p class="lede">If your question isn't here, ask in Discord.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="qa">
+      <details open><summary>Does it need any other plugins?</summary><p>Not on 4.1.0 or later — it's one jar with nothing else to install. On builds below 4.1.0 you want the free version of <a href="#" data-libs style="color:var(--iron)">LibsDisguises</a> alongside it, because that's what makes the bots look like players.</p></details>
+      <details><summary>What can I run it on?</summary><p>Paper, Bukkit, Purpur and Spigot, on Minecraft 1.16 and up. It's tested on <span data-tested>1.21.11</span>.</p></details>
+      <details><summary>Does it cost anything?</summary><p>No. It's free on Modrinth.</p></details>
+      <details><summary>How many bots can I run at once?</summary><p>One command spawns up to 50. Whether your server enjoys 50 of them is another matter — they path, fight and place blocks the way players do, so scale up gradually and watch your TPS.</p></details>
+      <details><summary>Can bots fight each other?</summary><p>Yes. Put them in two groups and set the groups on each other with <span class="cmd">/fightbot fight --group A B</span>. Good for watching what a loadout actually does.</p></details>
+      <details><summary>Can I change their gear while they're fighting?</summary><p>Right-click a bot in creative any time. The equipment screen is live, and empty hotbar slots refill from the bot's storage mid-fight.</p></details>
+      <details><summary>Do bots drop their gear when they die?</summary><p>No. They clean themselves up, so your arena doesn't fill with loot.</p></details>
+      <details><summary>Why do the bots have player names?</summary><p>They're pulled from <span class="cmd">botnames.yml</span>, and they show in the tab list, so a bot reads like a real player joining. Edit that file to change the pool.</p></details>
+      <details><summary>Is there a permission node?</summary><p><span class="cmd">fightbot.use</span>, default OP. Grant it to let other people spawn and command bots.</p></details>
+      <details><summary>Should I use the beta builds?</summary><p>Only if you're chasing a specific fix or happy to report bugs. Stick to the newest full release for anything you care about, and always back up first.</p></details>
+      <details><summary>What's coming next?</summary><p>Mace and crystal gear support in the reserved equipment slots, bots potting themselves mid-fight, and a proper GUI for the commands. Discord gets the details first.</p></details>
+      <details><summary>Can I use it in a video?</summary><p>Go ahead. A link back is appreciated but not required.</p></details>
+      <details><summary>How do I report a bug?</summary><p>Discord, with your server version, your plugin version, and whatever the console printed. Most updates come straight out of those reports.</p></details>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn" href="#" data-discord>Ask in Discord</a>
+      <a class="btn ghost" href="wiki.html">Read the wiki</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

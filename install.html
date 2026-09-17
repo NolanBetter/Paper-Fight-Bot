@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install — Paper Fight Bot</title>
+<meta name="description" content="How to install Paper Fight Bot and spawn your first bot.">
+<meta property="og:title" content="Install — Paper Fight Bot">
+<meta property="og:description" content="How to install Paper Fight Bot and spawn your first bot.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/install.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>Install</h1>
+    <p class="lede">Paper, Bukkit, Purpur or Spigot on 1.16 or newer. Four minutes to your first fight.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="note">
+      <b>Do you need LibsDisguises?</b> Only on plugin versions <b>below 4.1.0</b>, where it is what makes the
+      bots look like players. From <b>4.1.0 onward the plugin stands alone</b> and you can skip it entirely.
+      If you are installing fresh today, you only need one jar.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div>
+          <h3>Download the jar</h3>
+          <p>Grab the newest full release from Modrinth. Betas are there too, but start on a stable build unless you are chasing a specific fix.</p>
+          <div class="cta-row" style="margin-top:6px">
+            <a class="btn" href="#" data-modrinth>Open Modrinth</a>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h3>Drop it in and restart</h3>
+          <p>Put the jar in your server's <span class="cmd">plugins</span> folder and do a full restart, not a reload. The plugin writes its <span class="cmd">config.yml</span> and <span class="cmd">botnames.yml</span> on first boot.</p>
+          <p>On an older build, install <a href="#" data-libs style="color:var(--iron)">the free LibsDisguises</a> alongside it before restarting.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h3>Spawn a bot</h3>
+          <p>Join the server and run this. You get a bot with a random player&#8209;style name at your feet.</p>
+          <pre>/fightbot spawn --random 1
+
+<span class="c"># or name it yourself</span>
+/fightbot spawn <span class="k">Kade</span></pre>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h3>Gear it up</h3>
+          <p>Switch to creative and right&#8209;click the bot to open its equipment screen. Fill the slots with whatever you want it fighting you with — armour, sword, totem, axe, food, pearls, webs, water bucket. Or skip this and fight it bare&#8209;handed.</p>
+          <p>Full slot list is in the <a href="wiki.html#equipment" style="color:var(--iron)">wiki</a>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div>
+          <h3>Point it at yourself</h3>
+          <p>Now it hunts you.</p>
+          <pre>/fightbot fight <span class="k">Kade</span> <span class="k">YourUsername</span>
+
+<span class="c"># had enough</span>
+/fightbot stop --all</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="note gold" style="margin-top:34px">
+      <b>Permission:</b> everything sits under <span class="cmd">fightbot.use</span>, which defaults to OP.
+      Grant it in your permissions plugin to let other people spawn bots.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
