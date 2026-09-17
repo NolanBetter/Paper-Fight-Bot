@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Account — Paper Fight Bot</title>
-<meta name="description" content="Accounts for Paper Fight Bot. Not switched on yet.">
+<meta name="description" content="Sign in and link your Minecraft name to Paper Fight Bot.">
 <meta property="og:title" content="Account — Paper Fight Bot">
-<meta property="og:description" content="Accounts for Paper Fight Bot. Not switched on yet.">
+<meta property="og:description" content="Sign in and link your Minecraft name to Paper Fight Bot.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fightmc.xyz/account.html">
 <meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
@@ -38,18 +38,39 @@
 <div class="phead">
   <div class="wrap">
     <h1>Account</h1>
-    <p class="lede">Accounts aren't switched on yet. This is where they'll live.</p>
+    <p class="lede">Link your Minecraft name and it shows in the corner of every page. Signing in with Google or Discord comes next.</p>
   </div>
 </div>
 
 <section class="tight">
   <div class="wrap">
+
+    <h2>Your Minecraft name</h2>
+    <p class="lede">This works now. It is kept in your browser, so it is yours alone until accounts are switched on.</p>
+
+    <div class="me" data-mc-card hidden>
+      <img data-mc-head alt="">
+      <div>
+        <div class="name" data-mc-name>Steve</div>
+        <div class="sub">Shown in the corner of every page</div>
+      </div>
+    </div>
+
+    <div class="link-row">
+      <input data-mc-input type="text" placeholder="Minecraft username" maxlength="16"
+             autocomplete="off" spellcheck="false" aria-label="Minecraft username">
+      <button class="btn" data-mc-set type="button">Save</button>
+      <button class="btn ghost" data-mc-clear type="button">Clear</button>
+    </div>
+    <p style="color:var(--ember);font-size:15px;margin-top:12px" data-mc-note></p>
+
+    <h2 style="margin-top:56px">Sign in</h2>
     <div data-signed-out>
       <div class="signin">
-        <h3>Sign in</h3>
-        <p>Coming soon. Nothing is collected here right now — no sign-up, no tracking, no database behind this page.</p>
-        <button class="btn" data-signin disabled>Sign in with Google</button>
-        <button class="btn ghost" data-signin disabled>Sign in with email</button>
+        <h3>Not signed in</h3>
+        <p>Google and Discord are wired up but not switched on yet. Nothing is collected here right now — no sign-up, no tracking, no database behind this page.</p>
+        <button class="btn" data-signin-google disabled>Sign in with Google</button>
+        <button class="btn ghost" data-signin-discord disabled>Sign in with Discord</button>
       </div>
     </div>
 
@@ -61,7 +82,7 @@
       </div>
     </div>
 
-    <h2 style="margin-top:52px">What accounts will be for</h2>
+    <h2 style="margin-top:56px">What accounts will be for</h2>
     <div class="spec">
       <div class="spec-row">
         <h3>Saved loadouts <span class="soon">planned</span></h3>
@@ -69,7 +90,7 @@
       </div>
       <div class="spec-row">
         <h3>Config presets <span class="soon">planned</span></h3>
-        <p>Share and download <span class="cmd">config.yml</span> presets — harder bots, slower bots, crystal-focused bots.</p>
+        <p>Share and download <span class="cmd">config.yml</span> presets — harder bots, slower bots, crystal&#8209;focused bots.</p>
       </div>
       <div class="spec-row">
         <h3>Bug reports <span class="soon">planned</span></h3>
@@ -78,7 +99,8 @@
     </div>
 
     <div class="note" style="margin-top:30px">
-      <b>Nothing is collected right now.</b> The sign-in buttons above are inert until the backend exists.
+      <b>Head images</b> come from mc&#8209;heads.net, with minotar.net as a backup. Nothing of yours is sent
+      anywhere else, and no account is needed for the name to work.
     </div>
   </div>
 </section>
