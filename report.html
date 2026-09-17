@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report a bug — Paper Fight Bot</title>
+<meta name="description" content="Report a Paper Fight Bot bug with your versions attached.">
+<meta property="og:title" content="Report a bug — Paper Fight Bot">
+<meta property="og:description" content="Report a Paper Fight Bot bug with your versions attached.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/report.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>Report a bug</h1>
+    <p class="lede">The more of this you fill in, the faster it gets fixed. Version numbers and console output do most of the work.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="form">
+      <label for="mcname">Your Minecraft name</label>
+      <input id="mcname" type="text" maxlength="16" autocomplete="off" spellcheck="false">
+
+      <label for="pluginver">Paper Fight Bot version</label>
+      <input id="pluginver" type="text" placeholder="4.9.0-beta" autocomplete="off" spellcheck="false">
+
+      <label for="server">Server software and version</label>
+      <input id="server" type="text" placeholder="Paper 1.21.11" autocomplete="off" spellcheck="false">
+
+      <label for="what">What went wrong</label>
+      <textarea id="what" rows="4" placeholder="Bots spawn but barely move. They walk a block or two then stop."></textarea>
+
+      <label for="steps">Steps to reproduce <span class="opt">optional, but it helps a lot</span></label>
+      <textarea id="steps" rows="4" placeholder="1. /fightbot spawn --random 1&#10;2. /fightbot fight Kade myname&#10;3. Bot takes about ten seconds to cross five blocks"></textarea>
+
+      <label for="console">Console output <span class="opt">optional, paste any errors</span></label>
+      <textarea id="console" rows="6" class="mono" placeholder="[12:04:31 WARN]: ..."></textarea>
+
+      <p class="hint" id="modeHint"></p>
+      <button class="btn" id="sendReport" type="button">Send report</button>
+      <p class="status" id="status" hidden></p>
+
+      <div id="fallback" hidden>
+        <label for="fallbackText">Copy this and paste it into Discord</label>
+        <textarea id="fallbackText" rows="10" class="mono" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:32px">
+      <b>Before you send.</b> If you are on a beta, try the newest full release first — a good share of
+      reports are already fixed there. And check the <a href="faq.html" style="color:var(--iron)">FAQ</a>,
+      since slow bots and config changes not applying both have known answers.
+    </div>
+
+    <div class="cta-row">
+      <a class="btn ghost" href="#" data-discord>Open Discord</a>
+      <a class="btn ghost" href="wiki.html#trouble">Troubleshooting</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script src="assets/report.js"></script>
+</body>
+</html>
