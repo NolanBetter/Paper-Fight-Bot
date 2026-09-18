@@ -1,0 +1,77 @@
+rules_version = '2';
+
+// Paper Fight Bot. Paste this into Firebase console -> Firestore -> Rules.
+//
+// The short version: anyone can read the FAQ and wiki. Signed in people can
+// file reports and reply to their own. Only the owner sees everything and can
+// edit the pages. Nobody can make themselves the owner.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isOwner() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && me().role == 'owner';
+    }
+
+    // ---------------------------------------------------------------- users
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isOwner());
+
+      // you may create your own record, but only as a plain user
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == 'user';
+
+      // you may edit your own record, but your role must stay as it was.
+      // This is what stops anyone promoting themselves to owner.
+      allow update: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role == resource.data.role;
+
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------- reports
+    match /reports/{id} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read:   if signedIn() && (resource.data.uid == request.auth.uid || isOwner());
+      allow update: if isOwner();
+      allow delete: if isOwner();
+
+      // replies. Either side of a report may post, nobody else may read it.
+      match /messages/{msg} {
+        function reportOwner() {
+          return get(/databases/$(database)/documents/reports/$(id)).data.uid;
+        }
+        allow create: if signedIn()
+          && request.resource.data.uid == request.auth.uid
+          && (reportOwner() == request.auth.uid || isOwner());
+        allow read: if signedIn()
+          && (reportOwner() == request.auth.uid || isOwner());
+        allow update, delete: if false;
+      }
+    }
+
+    // -------------------------------------------------------------- content
+    // The FAQ and wiki. Public to read, owner only to change.
+    match /content/{page} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // everything else is closed
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

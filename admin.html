@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit pages — Paper Fight Bot</title>
+<meta name="description" content="Owner tools: edit the FAQ and wiki in Markdown.">
+<meta property="og:title" content="Edit pages — Paper Fight Bot">
+<meta property="og:description" content="Owner tools: edit the FAQ and wiki in Markdown.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/admin.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="report.html">Report</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1>Edit pages</h1>
+    <p class="lede">Write the FAQ and wiki in Markdown, the same way as the Modrinth description. Saving publishes straight away.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+
+    <div id="adminGate" hidden>
+      <div class="note" style="margin-top:0">
+        <b>Owner only.</b> This page is for whoever owns the project. If that should be you, set
+        <span class="cmd">role</span> to <span class="cmd">owner</span> on your own user document in the
+        Firestore console. FIREBASE-SETUP.md walks through it.
+      </div>
+      <div class="cta-row"><a class="btn ghost" href="index.html">Back to the site</a></div>
+    </div>
+
+    <div id="adminTool" hidden>
+      <div class="cta-row" style="margin:0 0 22px">
+        <button class="btn ghost tab" data-doc="faq" type="button">FAQ</button>
+        <button class="btn ghost tab" data-doc="wiki" type="button">Wiki</button>
+      </div>
+
+      <div class="editor">
+        <div class="form">
+          <label for="md">Markdown</label>
+          <textarea id="md" class="mono" rows="24" spellcheck="false"></textarea>
+          <button class="btn" id="saveContent" type="button" style="margin-top:16px">Save and publish</button>
+          <button class="btn ghost" id="clearContent" type="button" style="margin-top:10px">Clear back to built in text</button>
+          <p class="status" id="adminNote" hidden></p>
+        </div>
+        <div class="form">
+          <label>Preview</label>
+          <div id="preview" class="preview"></div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:28px">
+        <b>What works.</b> Headings, <span class="cmd">**bold**</span>, <span class="cmd">*italic*</span>,
+        <span class="cmd">`code`</span>, fenced code blocks, links, images, bullet and numbered lists,
+        tables, quotes and <span class="cmd">---</span> rules. Leave a page empty and the built in text
+        comes back.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script type="module" src="assets/app.js"></script>
+</body>
+</html>

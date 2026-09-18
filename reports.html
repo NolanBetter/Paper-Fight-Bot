@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reports — Paper Fight Bot</title>
+<meta name="description" content="Your bug reports and the replies to them.">
+<meta property="og:title" content="Reports — Paper Fight Bot">
+<meta property="og:description" content="Your bug reports and the replies to them.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://fightmc.xyz/reports.html">
+<meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
+<meta name="theme-color" content="#060506">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt=""><span><span class="p">PAPER </span>FIGHT <b>BOT</b></span></a>
+    <nav>
+      <a href="install.html">Install</a>
+      <a href="wiki.html">Wiki</a>
+      <a href="faq.html">FAQ</a>
+      <a href="report.html">Report</a>
+      <a href="account.html">Account</a>
+      <a href="#" data-modrinth>Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="phead">
+  <div class="wrap">
+    <h1 id="listHeading">Your reports</h1>
+    <p class="lede">Every report you have filed, and anything that has come back.</p>
+  </div>
+</div>
+
+<section class="tight">
+  <div class="wrap">
+
+    <div id="listWrap" hidden>
+      <div id="reportList" class="rep-list"></div>
+      <div class="cta-row">
+        <a class="btn" href="report.html">File a new report</a>
+      </div>
+    </div>
+
+    <div id="threadWrap" hidden>
+      <div class="cta-row" style="margin:0 0 26px">
+        <a class="btn ghost" href="reports.html">All reports</a>
+      </div>
+
+      <div class="form" id="thread"></div>
+
+      <div class="form" id="replyBox" hidden style="margin-top:22px">
+        <label for="replyText">Reply</label>
+        <textarea id="replyText" rows="5" placeholder="Write your reply"></textarea>
+        <button class="btn" id="sendReply" type="button" style="margin-top:16px">Send reply</button>
+        <p class="status" id="replyNote" hidden></p>
+
+        <div id="ownerTools" hidden style="margin-top:22px">
+          <label>Set status</label>
+          <div class="cta-row" style="margin-top:8px">
+            <button class="btn ghost" data-set-status="open" type="button">Open</button>
+            <button class="btn ghost" data-set-status="answered" type="button">Answered</button>
+            <button class="btn ghost" data-set-status="closed" type="button">Closed</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap f-in">
+    <a href="install.html">Install</a>
+    <a href="wiki.html">Wiki</a>
+    <a href="faq.html">FAQ</a>
+    <a href="#" data-modrinth>Modrinth</a>
+    <a href="#" data-discord>Discord</a>
+    <span class="credit">Paper Fight Bot &middot; not an official Minecraft service, not approved by Mojang</span>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script type="module" src="assets/app.js"></script>
+</body>
+</html>

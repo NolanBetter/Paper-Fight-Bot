@@ -7,14 +7,21 @@ stylesheet, two scripts.
     install.html    installation and first fight
     wiki.html       commands, equipment, groups, roaming, patrols, config
     faq.html        common questions
+    report.html     bug report form
+    reports.html    your reports, and the reply threads
+    admin.html      owner only, edits the FAQ and wiki in Markdown
     account.html    accounts (not switched on yet)
     404.html        GitHub Pages 404
+    FIREBASE-SETUP.md  how to turn sign in, reports and editing on
+    firestore.rules    paste into Firebase console -> Firestore -> Rules
     CNAME           custom domain
     .nojekyll       stops Pages ignoring files starting with _
     assets/
       style.css     all styling
       site.js       CONFIG + shared page wiring
-      auth.js       Firebase stub, commented, ready to enable
+      firebase.js   project config and the auth/firestore handles
+      md.js         the Markdown renderer
+      app.js        accounts, nav, reports, threads, content editing
       logo.png      the square mark
       wordmark.png  the wide Paper Fight Bot lockup
       banner.png    1200x630, used for Discord and social embeds

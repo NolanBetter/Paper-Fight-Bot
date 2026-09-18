@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Account — Paper Fight Bot</title>
-<meta name="description" content="Sign in and link your Minecraft name to Paper Fight Bot.">
+<meta name="description" content="Sign in to file and follow bug reports, and link your Minecraft name.">
 <meta property="og:title" content="Account — Paper Fight Bot">
-<meta property="og:description" content="Sign in and link your Minecraft name to Paper Fight Bot.">
+<meta property="og:description" content="Sign in to file and follow bug reports, and link your Minecraft name.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fightmc.xyz/account.html">
 <meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
@@ -27,6 +27,7 @@
       <a href="install.html">Install</a>
       <a href="wiki.html">Wiki</a>
       <a href="faq.html">FAQ</a>
+      <a href="report.html">Report</a>
       <a href="account.html">Account</a>
       <a href="#" data-modrinth>Download</a>
     </nav>
@@ -38,71 +39,60 @@
 <div class="phead">
   <div class="wrap">
     <h1>Account</h1>
-    <p class="lede">Link your Minecraft name and it shows in the corner of every page. Signing in with Google or Discord comes next.</p>
+    <p class="lede">An account lets you file bug reports and read the replies. Link your Minecraft name and your head shows in the corner of every page.</p>
   </div>
 </div>
 
 <section class="tight">
   <div class="wrap">
-
     <p class="note" data-why hidden style="margin-top:0"></p>
 
-    <h2>Your Minecraft name</h2>
-    <p class="lede">This works now. It is kept in your browser, so it is yours alone until accounts are switched on.</p>
-
-    <div class="me" data-mc-card hidden>
-      <img data-mc-head alt="">
-      <div>
-        <div class="name" data-mc-name>Steve</div>
-        <div class="sub">Shown in the corner of every page</div>
-      </div>
-    </div>
-
-    <div class="link-row">
-      <input data-mc-input type="text" placeholder="Minecraft username" maxlength="16"
-             autocomplete="off" spellcheck="false" aria-label="Minecraft username">
-      <button class="btn" data-mc-set type="button">Save</button>
-      <button class="btn ghost" data-mc-clear type="button">Clear</button>
-    </div>
-    <p style="color:var(--ember);font-size:15px;margin-top:12px" data-mc-note></p>
-
-    <h2 style="margin-top:56px">Sign in</h2>
     <div data-signed-out>
-      <div class="signin">
-        <h3>Not signed in</h3>
-        <p>Google and Discord are wired up but not switched on yet. Nothing is collected here right now — no sign-up, no tracking, no database behind this page.</p>
-        <button class="btn" data-signin-google disabled>Sign in with Google</button>
-        <button class="btn ghost" data-signin-discord disabled>Sign in with Discord</button>
+      <div class="form" style="max-width:480px">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" spellcheck="false">
+
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password">
+
+        <p class="hint">Six characters or more. Used only to sign you in and to send replies to your reports.</p>
+        <button class="btn" id="signIn" type="button">Sign in</button>
+        <button class="btn ghost" id="register" type="button" style="margin-top:10px">Create an account</button>
+        <button class="btn ghost" id="reset" type="button" style="margin-top:10px">Forgot password</button>
+        <p class="status" id="authNote" hidden></p>
       </div>
     </div>
 
     <div data-signed-in hidden>
-      <div class="signin">
-        <h3>Signed in</h3>
-        <p>Welcome back, <span data-user-name>there</span>.</p>
-        <button class="btn ghost" data-signout>Sign out</button>
+      <div class="me" data-mc-card hidden>
+        <img data-mc-head alt="">
+        <div>
+          <div class="name" data-mc-name>Steve</div>
+          <div class="sub">Shown in the corner of every page</div>
+        </div>
+      </div>
+
+      <div class="form" style="max-width:560px;margin-top:22px">
+        <label>Signed in as</label>
+        <p class="hint" style="margin:0 0 18px"><span data-user-name>there</span> &middot; <span data-user-role>Player</span></p>
+
+        <label for="mcname">Your Minecraft name</label>
+        <input id="mcname" type="text" maxlength="16" autocomplete="off" spellcheck="false"
+               placeholder="Minecraft username">
+        <p class="status" id="mcNote" hidden></p>
+        <button class="btn" id="saveMc" type="button" style="margin-top:16px">Save name</button>
+        <button class="btn ghost" data-signout type="button" style="margin-top:10px">Sign out</button>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn ghost" href="reports.html">Your reports</a>
+        <a class="btn ghost" href="report.html">File a bug</a>
       </div>
     </div>
 
-    <h2 style="margin-top:56px">What accounts will be for</h2>
-    <div class="spec">
-      <div class="spec-row">
-        <h3>Saved loadouts <span class="soon">planned</span></h3>
-        <p>Build a bot loadout here and pull it into any server you run, instead of rebuilding it in the equipment screen every time.</p>
-      </div>
-      <div class="spec-row">
-        <h3>Config presets <span class="soon">planned</span></h3>
-        <p>Share and download <span class="cmd">config.yml</span> presets — harder bots, slower bots, crystal&#8209;focused bots.</p>
-      </div>
-      <div class="spec-row">
-        <h3>Bug reports <span class="soon">planned</span></h3>
-        <p>File a report from the site with your versions attached, rather than typing it all into Discord.</p>
-      </div>
-    </div>
-
-    <div class="note" style="margin-top:30px">
-      <b>Head images</b> come from mc&#8209;heads.net, with minotar.net as a backup. Nothing of yours is sent
-      anywhere else, and no account is needed for the name to work.
+    <div class="note" style="margin-top:34px">
+      <b>A linked name is a claim, not proof.</b> Anyone can type any username. It is there so replies
+      read properly and so your head shows up, not as a verified identity.
     </div>
   </div>
 </section>
@@ -121,6 +111,6 @@
 </footer>
 
 <script src="assets/site.js"></script>
-<script src="assets/auth.js"></script>
+<script type="module" src="assets/app.js"></script>
 </body>
 </html>

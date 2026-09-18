@@ -27,6 +27,7 @@
       <a href="install.html">Install</a>
       <a href="wiki.html">Wiki</a>
       <a href="faq.html">FAQ</a>
+      <a href="report.html">Report</a>
       <a href="account.html">Account</a>
       <a href="#" data-modrinth>Download</a>
     </nav>
@@ -63,14 +64,10 @@
       <label for="console">Console output <span class="opt">optional, paste any errors</span></label>
       <textarea id="console" rows="6" class="mono" placeholder="[12:04:31 WARN]: ..."></textarea>
 
-      <p class="hint" id="modeHint"></p>
+      <p class="hint">Sent straight to the owner. You will see any reply on your reports page.</p>
       <button class="btn" id="sendReport" type="button">Send report</button>
       <p class="status" id="status" hidden></p>
 
-      <div id="fallback" hidden>
-        <label for="fallbackText">Copy this and paste it into Discord</label>
-        <textarea id="fallbackText" rows="10" class="mono" readonly></textarea>
-      </div>
     </div>
 
     <div class="note" style="margin-top:32px">
@@ -100,6 +97,6 @@
 </footer>
 
 <script src="assets/site.js"></script>
-<script src="assets/report.js"></script>
+<script type="module" src="assets/app.js"></script>
 </body>
 </html>
