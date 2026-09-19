@@ -511,8 +511,7 @@ function escapeText(s) {
 }
 
 function flagEdited() {
-  const flag = $("[data-edited]");
-  if (flag) flag.hidden = false;
+  // the "maintained by the owner" banner was removed, nothing to do
 }
 
 // ---- the owner's editor
@@ -664,6 +663,81 @@ function mountAdmin() {
       when(note, friendly(e), true);
     }
   }
+
+  /**
+   * Accepts either JSON from the export button, or plain Markdown where every
+   * "## heading" starts a new entry. Returns entries, or throws.
+   */
+  function parseImport(text) {
+    const t = (text || "").trim();
+    if (!t) throw new Error("Nothing to import.");
+
+    if (t.startsWith("[") || t.startsWith("{")) {
+      const data = JSON.parse(t);
+      const arr = Array.isArray(data) ? data : (data.items || data.sections);
+      if (!Array.isArray(arr) || !arr.length) throw new Error("No entries in that JSON.");
+      return arr.map(raw => {
+        const title = raw.q || raw.title || raw.question || raw.name || "";
+        const body = raw.a || raw.body || raw.answer || raw.text || "";
+        if (!title) throw new Error("An entry has no question or title.");
+        return isFaq()
+          ? { id: raw.id || uid(), q: String(title), a: String(body) }
+          : { id: raw.id || uid(), title: String(title), body: String(body) };
+      });
+    }
+
+    // markdown: each heading starts an entry, everything under it is the body
+    const lines = t.replace(/\r\n?/g, "\n").split("\n");
+    const out = [];
+    let cur = null;
+    for (const line of lines) {
+      const h = line.match(/^#{1,3}\s+(.*)$/);
+      if (h) {
+        if (cur) out.push(cur);
+        cur = { title: h[1].trim(), body: [] };
+      } else if (cur) {
+        cur.body.push(line);
+      }
+    }
+    if (cur) out.push(cur);
+    if (!out.length) throw new Error("No headings found. Start each entry with ## followed by its title.");
+
+    return out.map(e => {
+      const body = e.body.join("\n").trim();
+      return isFaq()
+        ? { id: uid(), q: e.title, a: body }
+        : { id: uid(), title: e.title, body: body };
+    });
+  }
+
+  $("#doImport") && $("#doImport").addEventListener("click", async () => {
+    const box = $("#importText");
+    const add = $("#importAppend") && $("#importAppend").checked;
+    try {
+      const parsed = parseImport(box.value);
+      items = add ? items.concat(parsed) : parsed;
+      await persist();
+      draw();
+      box.value = "";
+      when(note, (add ? "Added " : "Imported ") + parsed.length + " entr"
+        + (parsed.length === 1 ? "y" : "ies") + ".");
+    } catch (e) {
+      when(note, e.message || "Could not read that.", true);
+    }
+  });
+
+  $("#doExport") && $("#doExport").addEventListener("click", () => {
+    const payload = isFaq() ? { items } : { sections: items };
+    const text = JSON.stringify(payload, null, 2);
+    const blob = new Blob([text], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = key + "-backup.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
+    when(note, "Downloaded, and copied to your clipboard.");
+  });
 
   $("#restoreDefaults") && $("#restoreDefaults").addEventListener("click", async () => {
     if (!confirm("Put the built in " + key + " back? Anything you have written here is replaced.")) return;
