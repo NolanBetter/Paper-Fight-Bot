@@ -13,6 +13,7 @@
 
 import { auth, db } from "./firebase.js";
 import { renderMarkdown } from "./md.js";
+import { DEFAULT_FAQ, DEFAULT_WIKI } from "./defaults.js";
 import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
   onAuthStateChanged, sendPasswordResetEmail,
@@ -456,47 +457,52 @@ async function readContent(key) {
 
 // ---- the public FAQ page
 async function renderFaq() {
-  const data = await readContent("faq");
-  if (!data) return;
   const host = $("#faqBody");
   if (!host) return;
+  const data = await readContent("faq");
 
-  if (Array.isArray(data.items) && data.items.length) {
-    host.innerHTML = '<div class="qa">' + data.items.map(it => `
+  // an older single blob, from before entries existed
+  if (data && !Array.isArray(data.items) && data.markdown && data.markdown.trim()) {
+    host.innerHTML = renderMarkdown(data.markdown);
+    flagEdited();
+    return;
+  }
+
+  const items = data && Array.isArray(data.items) && data.items.length
+    ? data.items : DEFAULT_FAQ;
+  if (data && Array.isArray(data.items) && data.items.length) flagEdited();
+
+  host.innerHTML = '<div class="qa">' + items.map(it => `
       <details>
         <summary>${escapeText(it.q)}</summary>
         ${renderMarkdown(it.a, { headings: false })}
       </details>`).join("") + "</div>";
-    flagEdited();
-  } else if (data.markdown && data.markdown.trim()) {
-    host.innerHTML = renderMarkdown(data.markdown);   // older single blob
-    flagEdited();
-  }
 }
 
 // ---- the public wiki page
 async function renderWiki() {
-  const data = await readContent("wiki");
-  if (!data) return;
   const body = $("#wikiBody");
   if (!body) return;
+  const data = await readContent("wiki");
+  const nav = $(".wiki-nav");
 
-  if (Array.isArray(data.sections) && data.sections.length) {
-    body.innerHTML = data.sections.map(sec => `
-      <h2 id="${sec.id}">${escapeText(sec.title)}</h2>
-      ${renderMarkdown(sec.body)}`).join("");
-
-    const nav = $(".wiki-nav");
-    if (nav) {
-      nav.innerHTML = data.sections
-        .map(sec => `<a href="#${sec.id}">${escapeText(sec.title)}</a>`).join("");
-    }
-    flagEdited();
-  } else if (data.markdown && data.markdown.trim()) {
+  if (data && !Array.isArray(data.sections) && data.markdown && data.markdown.trim()) {
     body.innerHTML = renderMarkdown(data.markdown);
-    const nav = $(".wiki-nav");
     if (nav) nav.hidden = true;
     flagEdited();
+    return;
+  }
+
+  const sections = data && Array.isArray(data.sections) && data.sections.length
+    ? data.sections : DEFAULT_WIKI;
+  if (data && Array.isArray(data.sections) && data.sections.length) flagEdited();
+
+  body.innerHTML = sections.map(sec => `
+      <h2 id="${sec.id}">${escapeText(sec.title)}</h2>
+      ${renderMarkdown(sec.body)}`).join("");
+  if (nav) {
+    nav.innerHTML = sections
+      .map(sec => `<a href="#${sec.id}">${escapeText(sec.title)}</a>`).join("");
   }
 }
 
@@ -533,6 +539,9 @@ function mountAdmin() {
         when(note, "Your earlier text was brought in as one entry. Split it up as you like.");
       }
     }
+    // nothing saved yet, so start from what the site already shows. Adding an
+    // entry then adds to that list instead of replacing the whole page.
+    if (!items.length) items = (isFaq() ? DEFAULT_FAQ : DEFAULT_WIKI).map(x => Object.assign({}, x));
     draw();
   }
 
@@ -655,6 +664,14 @@ function mountAdmin() {
       when(note, friendly(e), true);
     }
   }
+
+  $("#restoreDefaults") && $("#restoreDefaults").addEventListener("click", async () => {
+    if (!confirm("Put the built in " + key + " back? Anything you have written here is replaced.")) return;
+    items = (isFaq() ? DEFAULT_FAQ : DEFAULT_WIKI).map(x => Object.assign({}, x));
+    await persist();
+    draw();
+    when(note, "Built in " + key + " restored.");
+  });
 
   $("#addItem") && $("#addItem").addEventListener("click", async () => {
     const entry = isFaq()
