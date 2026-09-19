@@ -15,7 +15,8 @@ import { auth, db } from "./firebase.js";
 import { renderMarkdown } from "./md.js";
 import {
   createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
-  onAuthStateChanged, sendPasswordResetEmail
+  onAuthStateChanged, sendPasswordResetEmail,
+  GoogleAuthProvider, signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import {
   doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs,
@@ -71,6 +72,12 @@ function friendly(err) {
   if (code.includes("too-many-requests")) return "Too many tries. Wait a minute and go again.";
   if (code.includes("network")) return "Could not reach the server. Check your connection.";
   if (code.includes("permission-denied")) return "You are not allowed to do that.";
+  if (code.includes("popup-closed")) return "Sign in window closed before it finished.";
+  if (code.includes("popup-blocked")) return "Your browser blocked the popup. Allow popups and try again.";
+  if (code.includes("operation-not-allowed")) return "That sign in method is not switched on in Firebase yet.";
+  if (code.includes("account-exists-with-different-credential")) {
+    return "That email already has an account made a different way. Sign in with the other method.";
+  }
   return (err && err.message) || "Something went wrong.";
 }
 
@@ -144,13 +151,37 @@ function mountAccount() {
     why.hidden = false;
   }
 
-  const email = $("#email"), pass = $("#password");
-  const note = $("#authNote");
-
   const go = () => {
     if (next && /^[a-z0-9._-]+\.html$/i.test(next)) location.href = next;
   };
 
+  // two panels: signing in, and making an account. Swapping between them
+  // never asks for anything you have not been shown a box for.
+  const signInPanel = $("#signInPanel");
+  const registerPanel = $("#registerPanel");
+  const show = which => {
+    if (signInPanel) signInPanel.hidden = which !== "signin";
+    if (registerPanel) registerPanel.hidden = which !== "register";
+  };
+  $("#showRegister") && $("#showRegister").addEventListener("click", () => show("register"));
+  $("#showSignIn") && $("#showSignIn").addEventListener("click", () => show("signin"));
+
+  const note = $("#authNote"), regNote = $("#regNote");
+
+  // ---- google
+  const google = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const cred = await signInWithPopup(auth, provider);
+      await ensureProfile(cred.user);
+      when(note, ""); when(regNote, "");
+      go();
+    } catch (e) { when(note, friendly(e), true); when(regNote, friendly(e), true); }
+  };
+  $$("[data-google]").forEach(b => b.addEventListener("click", google));
+
+  // ---- email in
+  const email = $("#email"), pass = $("#password");
   const onSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email.value.trim(), pass.value);
@@ -158,32 +189,40 @@ function mountAccount() {
       go();
     } catch (e) { when(note, friendly(e), true); }
   };
+  $("#signIn") && $("#signIn").addEventListener("click", onSignIn);
+  pass && pass.addEventListener("keydown", e => { if (e.key === "Enter") onSignIn(); });
 
-  const onRegister = async () => {
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email.value.trim(), pass.value);
-      await setDoc(doc(db, "users", cred.user.uid), {
-        email: cred.user.email, mcName: "", role: "user", createdAt: serverTimestamp()
-      });
-      when(note, "");
-      go();
-    } catch (e) { when(note, friendly(e), true); }
-  };
-
-  const onReset = async () => {
+  $("#reset") && $("#reset").addEventListener("click", async () => {
     if (!email.value.trim()) return when(note, "Put your email in first.", true);
     try {
       await sendPasswordResetEmail(auth, email.value.trim());
       when(note, "Reset email sent. Check your inbox.");
     } catch (e) { when(note, friendly(e), true); }
-  };
+  });
 
-  $("#signIn") && $("#signIn").addEventListener("click", onSignIn);
-  $("#register") && $("#register").addEventListener("click", onRegister);
-  $("#reset") && $("#reset").addEventListener("click", onReset);
-  pass && pass.addEventListener("keydown", e => { if (e.key === "Enter") onSignIn(); });
+  // ---- register
+  const rUser = $("#regUser"), rEmail = $("#regEmail"), rPass = $("#regPassword");
+  $("#createAccount") && $("#createAccount").addEventListener("click", async () => {
+    const mc = (rUser.value || "").trim();
+    if (mc && !/^[A-Za-z0-9_]{3,16}$/.test(mc)) {
+      return when(regNote, "Minecraft name is three to sixteen letters, numbers or underscores.", true);
+    }
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, rEmail.value.trim(), rPass.value);
+      await setDoc(doc(db, "users", cred.user.uid), {
+        email: cred.user.email, mcName: mc, role: "user", createdAt: serverTimestamp()
+      });
+      when(regNote, "");
+      go();
+    } catch (e) { when(regNote, friendly(e), true); }
+  });
+  rPass && rPass.addEventListener("keydown", e => {
+    if (e.key === "Enter") $("#createAccount").click();
+  });
+
   $$("[data-signout]").forEach(b => b.addEventListener("click", () => signOut(auth)));
 
+  // ---- minecraft name, once signed in
   const mcInput = $("#mcname"), mcNote = $("#mcNote");
   $("#saveMc") && $("#saveMc").addEventListener("click", async () => {
     const value = (mcInput.value || "").trim();
@@ -202,7 +241,7 @@ function mountAccount() {
     const out = $("[data-signed-out]"), inn = $("[data-signed-in]");
     if (out) out.hidden = !!state.user;
     if (inn) inn.hidden = !state.user;
-    if (!state.user) return;
+    if (!state.user) { show("signin"); return; }
 
     const nameEl = $("[data-user-name]");
     if (nameEl) nameEl.textContent = displayName() || "there";
@@ -218,6 +257,18 @@ function mountAccount() {
       if (n) n.textContent = mc;
       if (mcInput && !mcInput.value) mcInput.value = mc;
     }
+    const nudge = $("[data-name-nudge]");
+    if (nudge) nudge.hidden = !!mc;
+  });
+}
+
+/** Google gives us no Minecraft name, so make the record if it is missing. */
+async function ensureProfile(user) {
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) return;
+  await setDoc(ref, {
+    email: user.email || "", mcName: "", role: "user", createdAt: serverTimestamp()
   });
 }
 
@@ -390,81 +441,249 @@ function mountReports() {
 
 // -------------------------------------------------- owner content editing
 
-async function loadContent(key, target, hideSel) {
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+/** Reads a content doc, coping with the old single blob format. */
+async function readContent(key) {
   try {
     const snap = await getDoc(doc(db, "content", key));
-    if (!snap.exists()) return;
-    const md = snap.data().markdown;
-    if (!md || !md.trim()) return;
-    const host = $(target);
-    if (!host) return;
-    host.innerHTML = renderMarkdown(md);
-    // the built in sidebar links to built in headings, so it goes away once
-    // the page is the owner's own text
-    if (hideSel) { const el = $(hideSel); if (el) el.hidden = true; }
-    const flag = $("[data-edited]");
-    if (flag) flag.hidden = false;
+    if (!snap.exists()) return null;
+    return snap.data();
   } catch (e) {
-    // no content doc, or offline. The page already has its built in copy.
+    return null;
   }
 }
 
+// ---- the public FAQ page
+async function renderFaq() {
+  const data = await readContent("faq");
+  if (!data) return;
+  const host = $("#faqBody");
+  if (!host) return;
+
+  if (Array.isArray(data.items) && data.items.length) {
+    host.innerHTML = '<div class="qa">' + data.items.map(it => `
+      <details>
+        <summary>${escapeText(it.q)}</summary>
+        ${renderMarkdown(it.a, { headings: false })}
+      </details>`).join("") + "</div>";
+    flagEdited();
+  } else if (data.markdown && data.markdown.trim()) {
+    host.innerHTML = renderMarkdown(data.markdown);   // older single blob
+    flagEdited();
+  }
+}
+
+// ---- the public wiki page
+async function renderWiki() {
+  const data = await readContent("wiki");
+  if (!data) return;
+  const body = $("#wikiBody");
+  if (!body) return;
+
+  if (Array.isArray(data.sections) && data.sections.length) {
+    body.innerHTML = data.sections.map(sec => `
+      <h2 id="${sec.id}">${escapeText(sec.title)}</h2>
+      ${renderMarkdown(sec.body)}`).join("");
+
+    const nav = $(".wiki-nav");
+    if (nav) {
+      nav.innerHTML = data.sections
+        .map(sec => `<a href="#${sec.id}">${escapeText(sec.title)}</a>`).join("");
+    }
+    flagEdited();
+  } else if (data.markdown && data.markdown.trim()) {
+    body.innerHTML = renderMarkdown(data.markdown);
+    const nav = $(".wiki-nav");
+    if (nav) nav.hidden = true;
+    flagEdited();
+  }
+}
+
+function escapeText(s) {
+  return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function flagEdited() {
+  const flag = $("[data-edited]");
+  if (flag) flag.hidden = false;
+}
+
+// ---- the owner's editor
 function mountAdmin() {
-  const area = $("#md"), preview = $("#preview"), note = $("#adminNote");
+  const note = $("#adminNote");
   let key = "faq";
+  let items = [];          // faq: {id,q,a}   wiki: {id,title,body}
 
-  const draw = () => { if (preview) preview.innerHTML = renderMarkdown(area.value); };
+  const isFaq = () => key === "faq";
+  const host = () => $("#itemList");
 
-  $$("[data-doc]").forEach(btn => btn.addEventListener("click", async () => {
+  async function load() {
+    const data = await readContent(key);
+    items = [];
+    if (data) {
+      if (isFaq() && Array.isArray(data.items)) items = data.items.slice();
+      if (!isFaq() && Array.isArray(data.sections)) items = data.sections.slice();
+
+      // an older single blob becomes one starter entry rather than vanishing
+      if (!items.length && data.markdown && data.markdown.trim()) {
+        items = isFaq()
+          ? [{ id: uid(), q: "Imported", a: data.markdown }]
+          : [{ id: uid(), title: "Imported", body: data.markdown }];
+        when(note, "Your earlier text was brought in as one entry. Split it up as you like.");
+      }
+    }
+    draw();
+  }
+
+  function draw(openId) {
+    const wrap = host();
+    if (!wrap) return;
+    if (!items.length) {
+      wrap.innerHTML = '<p class="lede">Nothing here yet. The page shows its built in text until you add something.</p>';
+      return;
+    }
+    wrap.innerHTML = items.map((it, idx) => {
+      const title = isFaq() ? it.q : it.title;
+      const open = it.id === openId;
+      return `
+      <div class="ed-item" data-id="${it.id}">
+        <div class="ed-head">
+          <span class="ed-title">${escapeText(title) || "<em>untitled</em>"}</span>
+          <span class="ed-tools">
+            <button class="ed-btn" data-up="${it.id}" title="Move up" ${idx === 0 ? "disabled" : ""}>&uarr;</button>
+            <button class="ed-btn" data-down="${it.id}" title="Move down" ${idx === items.length - 1 ? "disabled" : ""}>&darr;</button>
+            <button class="ed-btn" data-edit="${it.id}">Edit</button>
+            <button class="ed-btn danger" data-del="${it.id}">Delete</button>
+          </span>
+        </div>
+        <div class="ed-body" ${open ? "" : "hidden"}>
+          <label>${isFaq() ? "Question" : "Section title"}</label>
+          <input class="ed-input" data-field="title" value="${escapeAttr(title)}">
+          <label>${isFaq() ? "Answer" : "Section text"}</label>
+          <textarea class="ed-input mono" data-field="body" rows="10">${escapeText(isFaq() ? it.a : it.body)}</textarea>
+          <p class="hint">${isFaq()
+            ? "Markdown works. Headings are off here, the question is already the heading."
+            : "Markdown works, headings included. Use # for sub headings inside the section."}</p>
+          <div class="cta-row" style="margin-top:6px">
+            <button class="btn" data-save="${it.id}" type="button">Save</button>
+            <button class="btn ghost" data-close="${it.id}" type="button">Close</button>
+          </div>
+          <div class="preview" data-preview style="margin-top:16px"></div>
+        </div>
+      </div>`;
+    }).join("");
+    wire();
+  }
+
+  function escapeAttr(s) {
+    return escapeText(s).replace(/"/g, "&quot;");
+  }
+
+  function find(id) { return items.find(x => x.id === id); }
+
+  function wire() {
+    const wrap = host();
+    wrap.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => {
+      draw(b.getAttribute("data-edit"));
+      livePreview(b.getAttribute("data-edit"));
+    }));
+    wrap.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => draw()));
+
+    wrap.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", async () => {
+      const it = find(b.getAttribute("data-del"));
+      const label = isFaq() ? it.q : it.title;
+      if (!confirm("Delete \"" + (label || "this entry") + "\"?")) return;
+      items = items.filter(x => x.id !== it.id);
+      await persist();
+      draw();
+    }));
+
+    wrap.querySelectorAll("[data-up],[data-down]").forEach(b => b.addEventListener("click", async () => {
+      const up = b.hasAttribute("data-up");
+      const id = b.getAttribute(up ? "data-up" : "data-down");
+      const i = items.findIndex(x => x.id === id);
+      const j = up ? i - 1 : i + 1;
+      if (j < 0 || j >= items.length) return;
+      const tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+      await persist();
+      draw();
+    }));
+
+    wrap.querySelectorAll("[data-save]").forEach(b => b.addEventListener("click", async () => {
+      const id = b.getAttribute("data-save");
+      const box = wrap.querySelector('.ed-item[data-id="' + id + '"]');
+      const title = box.querySelector('[data-field="title"]').value.trim();
+      const body = box.querySelector('[data-field="body"]').value;
+      if (!title) return when(note, isFaq() ? "The question cannot be empty." : "The section needs a title.", true);
+      const it = find(id);
+      if (isFaq()) { it.q = title; it.a = body; }
+      else { it.title = title; it.body = body; it.id = it.id || uid(); }
+      await persist();
+      draw();
+    }));
+
+    wrap.querySelectorAll('[data-field="body"]').forEach(area => {
+      area.addEventListener("input", () => {
+        const box = area.closest(".ed-item");
+        const prev = box.querySelector("[data-preview]");
+        if (prev) prev.innerHTML = renderMarkdown(area.value, { headings: !isFaq() });
+      });
+    });
+  }
+
+  function livePreview(id) {
+    const box = host().querySelector('.ed-item[data-id="' + id + '"]');
+    if (!box) return;
+    const area = box.querySelector('[data-field="body"]');
+    const prev = box.querySelector("[data-preview]");
+    if (area && prev) prev.innerHTML = renderMarkdown(area.value, { headings: !isFaq() });
+  }
+
+  async function persist() {
+    try {
+      const payload = {
+        updatedAt: serverTimestamp(),
+        updatedBy: displayName() || state.user.uid,
+        markdown: ""            // clear the old format so it cannot come back
+      };
+      if (isFaq()) payload.items = items;
+      else payload.sections = items;
+      await setDoc(doc(db, "content", key), payload);
+      when(note, "Saved. The " + key + " page is live.");
+    } catch (e) {
+      when(note, friendly(e), true);
+    }
+  }
+
+  $("#addItem") && $("#addItem").addEventListener("click", async () => {
+    const entry = isFaq()
+      ? { id: uid(), q: "New question", a: "" }
+      : { id: uid(), title: "New section", body: "" };
+    items.push(entry);
+    await persist();
+    draw(entry.id);
+  });
+
+  $$("[data-doc]").forEach(btn => btn.addEventListener("click", () => {
     key = btn.getAttribute("data-doc");
     $$("[data-doc]").forEach(b => b.classList.toggle("on", b === btn));
-    area.value = "Loading...";
-    try {
-      const snap = await getDoc(doc(db, "content", key));
-      area.value = snap.exists() ? (snap.data().markdown || "") : "";
-      when(note, "");
-    } catch (e) { when(note, friendly(e), true); area.value = ""; }
-    draw();
+    const label = $("#addLabel");
+    if (label) label.textContent = isFaq() ? "Add a question" : "Add a section";
+    when(note, "");
+    load();
   }));
-
-  area && area.addEventListener("input", draw);
-
-  $("#saveContent") && $("#saveContent").addEventListener("click", async () => {
-    try {
-      await setDoc(doc(db, "content", key), {
-        markdown: area.value,
-        updatedAt: serverTimestamp(),
-        updatedBy: displayName() || state.user.uid
-      });
-      when(note, "Saved. The " + key + " page is live.");
-    } catch (e) { when(note, friendly(e), true); }
-  });
-
-  $("#clearContent") && $("#clearContent").addEventListener("click", async () => {
-    if (!confirm("Clear this page back to the built in text?")) return;
-    try {
-      await setDoc(doc(db, "content", key), {
-        markdown: "", updatedAt: serverTimestamp(), updatedBy: displayName() || state.user.uid
-      });
-      area.value = "";
-      draw();
-      when(note, "Cleared. The built in text shows again.");
-    } catch (e) { when(note, friendly(e), true); }
-  });
 
   refresh.push(() => {
     if (!state.ready) return;
     if (!state.user) { location.replace("account.html?next=admin.html"); return; }
+    const gate = $("#adminGate"), tool = $("#adminTool");
     if (!isOwner()) {
-      const gate = $("#adminGate");
       if (gate) gate.hidden = false;
-      const tool = $("#adminTool");
       if (tool) tool.hidden = true;
       return;
     }
-    const gate = $("#adminGate");
     if (gate) gate.hidden = true;
-    const tool = $("#adminTool");
     if (tool && tool.hidden) {
       tool.hidden = false;
       const first = $('[data-doc="faq"]');
@@ -482,8 +701,8 @@ function route() {
   if (p === "report.html") mountReportForm();
   if (p === "reports.html") mountReports();
   if (p === "admin.html") mountAdmin();
-  if (p === "faq.html") loadContent("faq", "#faqBody");
-  if (p === "wiki.html") loadContent("wiki", "#wikiBody", ".wiki-nav");
+  if (p === "faq.html") renderFaq();
+  if (p === "wiki.html") renderWiki();
 }
 
 onAuthStateChanged(auth, async user => {

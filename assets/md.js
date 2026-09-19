@@ -38,8 +38,13 @@ function tableRow(line) {
   return line.trim().replace(/^\||\|$/g, "").split("|").map(c => c.trim());
 }
 
-export function renderMarkdown(src) {
+/**
+ * opts.headings false turns # lines into bold paragraphs instead of headings.
+ * FAQ answers use that, because the question is already the heading.
+ */
+export function renderMarkdown(src, opts) {
   if (!src) return "";
+  const allowHeadings = !opts || opts.headings !== false;
   const lines = escapeHtml(src.replace(/\r\n?/g, "\n")).split("\n");
   const out = [];
   let i = 0;
@@ -67,8 +72,12 @@ export function renderMarkdown(src) {
     // heading
     const h = line.match(/^(#{1,4})\s+(.*)$/);
     if (h) {
-      const level = Math.min(4, h[1].length + 1);   // # becomes h2, page owns h1
-      out.push(`<h${level}>${inline(h[2])}</h${level}>`);
+      if (allowHeadings) {
+        const level = Math.min(4, h[1].length + 1);   // # becomes h2, page owns h1
+        out.push(`<h${level}>${inline(h[2])}</h${level}>`);
+      } else {
+        out.push(`<p><strong>${inline(h[2])}</strong></p>`);
+      }
       i++;
       continue;
     }

@@ -243,6 +243,31 @@ td code,td .cmd{white-space:nowrap}
   box-shadow:inset 3px 3px 0 rgba(255,255,255,.22),inset -3px -3px 0 rgba(0,0,0,.45)}
 @media(max-width:860px){.editor{grid-template-columns:1fr}.preview{max-height:none}}
 
+/* ---------- or divider ---------- */
+.or{display:flex;align-items:center;gap:14px;margin:22px 0 4px;color:var(--ash);font-size:14px}
+.or::before,.or::after{content:"";flex:1;height:3px;background:#000}
+
+/* ---------- entry editor ---------- */
+.ed-list{display:grid;gap:3px;background:#000;border:3px solid #000;margin-bottom:24px}
+.ed-item{background:var(--pit)}
+.ed-head{display:flex;align-items:center;gap:14px;padding:16px 18px;flex-wrap:wrap}
+.ed-title{color:var(--iron);font-size:16.5px;flex:1;min-width:140px}
+.ed-tools{display:flex;gap:6px;flex-wrap:wrap}
+.ed-btn{font-family:var(--body);font-size:14px;background:var(--stone);color:var(--iron);
+  border:0;padding:8px 13px;cursor:pointer;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.09),inset -2px -2px 0 rgba(0,0,0,.65)}
+.ed-btn:hover{background:#242226;color:#fff}
+.ed-btn[disabled]{opacity:.35;cursor:not-allowed}
+.ed-btn.danger:hover{background:var(--blood);color:#fff}
+.ed-body{padding:4px 18px 22px;border-top:3px solid #000}
+.ed-body label{display:block;font-family:var(--display);font-size:16px;color:#fff;margin:18px 0 8px}
+.ed-input{width:100%;background:#000;color:#efedee;border:0;padding:12px 14px;
+  font-family:var(--body);font-size:16px;line-height:1.6;
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.1),inset -2px -2px 0 rgba(0,0,0,.9)}
+.ed-input:focus{outline:3px solid var(--ember);outline-offset:2px}
+textarea.ed-input{resize:vertical;font-size:15px}
+.ed-body .hint{color:var(--ash);font-size:14.5px;margin:10px 0 0}
+
 .qa{border-top:3px solid #000}
 .qa details{border-bottom:3px solid #000}
 .qa summary{cursor:pointer;padding:20px 0;font-family:var(--display);font-size:19px;color:#fff;
