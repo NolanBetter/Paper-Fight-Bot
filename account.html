@@ -48,19 +48,56 @@
     <p class="note" data-why hidden style="margin-top:0"></p>
 
     <div data-signed-out>
-      <div class="form" style="max-width:480px">
+
+      <div class="form" id="signInPanel" style="max-width:480px">
+        <h3 style="margin:0 0 6px">Sign in</h3>
+
+        <button class="btn" data-google type="button" style="margin-top:18px">Continue with Google</button>
+
+        <div class="or"><span>or use an email</span></div>
+
         <label for="email">Email</label>
         <input id="email" type="email" autocomplete="email" spellcheck="false">
 
         <label for="password">Password</label>
         <input id="password" type="password" autocomplete="current-password">
 
-        <p class="hint">Six characters or more. Used only to sign you in and to send replies to your reports.</p>
-        <button class="btn" id="signIn" type="button">Sign in</button>
-        <button class="btn ghost" id="register" type="button" style="margin-top:10px">Create an account</button>
-        <button class="btn ghost" id="reset" type="button" style="margin-top:10px">Forgot password</button>
+        <button class="btn" id="signIn" type="button" style="margin-top:18px">Sign in</button>
         <p class="status" id="authNote" hidden></p>
+
+        <div class="cta-row" style="margin-top:18px">
+          <button class="btn ghost" id="showRegister" type="button">Create an account</button>
+          <button class="btn ghost" id="reset" type="button">Forgot password</button>
+        </div>
       </div>
+
+      <div class="form" id="registerPanel" hidden style="max-width:480px">
+        <h3 style="margin:0 0 6px">Create an account</h3>
+        <p class="hint" style="margin:0 0 4px">Quickest way is Google. It fills in your email for you.</p>
+
+        <button class="btn" data-google type="button" style="margin-top:14px">Continue with Google</button>
+
+        <div class="or"><span>or fill this in</span></div>
+
+        <label for="regUser">Minecraft username <span class="opt">optional, you can add it later</span></label>
+        <input id="regUser" type="text" maxlength="16" autocomplete="off" spellcheck="false"
+               placeholder="Minecraft username">
+
+        <label for="regEmail">Email</label>
+        <input id="regEmail" type="email" autocomplete="email" spellcheck="false">
+
+        <label for="regPassword">Password</label>
+        <input id="regPassword" type="password" autocomplete="new-password">
+        <p class="hint">Six characters or more.</p>
+
+        <button class="btn" id="createAccount" type="button" style="margin-top:14px">Create account</button>
+        <p class="status" id="regNote" hidden></p>
+
+        <div class="cta-row" style="margin-top:18px">
+          <button class="btn ghost" id="showSignIn" type="button">Back to sign in</button>
+        </div>
+      </div>
+
     </div>
 
     <div data-signed-in hidden>
@@ -71,6 +108,10 @@
           <div class="sub">Shown in the corner of every page</div>
         </div>
       </div>
+
+      <p class="note gold" data-name-nudge hidden style="margin-top:0">
+        <b>Add your Minecraft name</b> and your head appears in the corner of every page.
+      </p>
 
       <div class="form" style="max-width:560px;margin-top:22px">
         <label>Signed in as</label>

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Edit pages — Paper Fight Bot</title>
-<meta name="description" content="Owner tools: edit the FAQ and wiki in Markdown.">
+<meta name="description" content="Owner tools: add, edit and remove FAQ questions and wiki sections.">
 <meta property="og:title" content="Edit pages — Paper Fight Bot">
-<meta property="og:description" content="Owner tools: edit the FAQ and wiki in Markdown.">
+<meta property="og:description" content="Owner tools: add, edit and remove FAQ questions and wiki sections.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://fightmc.xyz/admin.html">
 <meta property="og:image" content="https://fightmc.xyz/assets/banner.png">
@@ -39,7 +39,7 @@
 <div class="phead">
   <div class="wrap">
     <h1>Edit pages</h1>
-    <p class="lede">Write the FAQ and wiki in Markdown, the same way as the Modrinth description. Saving publishes straight away.</p>
+    <p class="lede">Add, edit, reorder and delete entries. Markdown works in every box, and saving publishes straight away.</p>
   </div>
 </div>
 
@@ -48,38 +48,35 @@
 
     <div id="adminGate" hidden>
       <div class="note" style="margin-top:0">
-        <b>Owner only.</b> This page is for whoever owns the project. If that should be you, set
-        <span class="cmd">role</span> to <span class="cmd">owner</span> on your own user document in the
-        Firestore console. FIREBASE-SETUP.md walks through it.
+        <b>Owner only.</b> If that should be you, set <span class="cmd">role</span> to
+        <span class="cmd">owner</span> on your own user document in the Firestore console.
+        FIREBASE-SETUP.md walks through it.
       </div>
       <div class="cta-row"><a class="btn ghost" href="index.html">Back to the site</a></div>
     </div>
 
     <div id="adminTool" hidden>
-      <div class="cta-row" style="margin:0 0 22px">
+      <div class="cta-row" style="margin:0 0 24px">
         <button class="btn ghost tab" data-doc="faq" type="button">FAQ</button>
         <button class="btn ghost tab" data-doc="wiki" type="button">Wiki</button>
       </div>
 
-      <div class="editor">
-        <div class="form">
-          <label for="md">Markdown</label>
-          <textarea id="md" class="mono" rows="24" spellcheck="false"></textarea>
-          <button class="btn" id="saveContent" type="button" style="margin-top:16px">Save and publish</button>
-          <button class="btn ghost" id="clearContent" type="button" style="margin-top:10px">Clear back to built in text</button>
-          <p class="status" id="adminNote" hidden></p>
-        </div>
-        <div class="form">
-          <label>Preview</label>
-          <div id="preview" class="preview"></div>
-        </div>
+      <p class="status" id="adminNote" hidden></p>
+
+      <div id="itemList" class="ed-list"></div>
+
+      <div class="cta-row">
+        <button class="btn" id="addItem" type="button"><span id="addLabel">Add a question</span></button>
       </div>
 
       <div class="note" style="margin-top:28px">
-        <b>What works.</b> Headings, <span class="cmd">**bold**</span>, <span class="cmd">*italic*</span>,
-        <span class="cmd">`code`</span>, fenced code blocks, links, images, bullet and numbered lists,
-        tables, quotes and <span class="cmd">---</span> rules. Leave a page empty and the built in text
-        comes back.
+        <b>How the two differ.</b> A FAQ answer has headings switched off, because the question is
+        already the heading. A wiki section has them on, so <span class="cmd">#</span> gives you sub
+        headings inside it, and the section title becomes its own button in the sidebar.
+      </div>
+      <div class="note">
+        <b>Delete everything</b> on a page and it falls back to the text built into the site, so you can
+        never paint yourself into a corner.
       </div>
     </div>
 
